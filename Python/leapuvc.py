@@ -64,7 +64,7 @@ class leapImageThread(threading.Thread):
         return self.cam.set(param, value)
     def setExposure(self, exposureUS):
         '''Sets the sensor's exposure in microseconds (up to 65535). \n(param, exposureUS) -> (ret)'''
-        return self.cam.set(cv2.CAP_PROP_ZOOM, max(50, exposureUS))
+        return self.cam.set(cv2.CAP_PROP_ZOOM, max(10, exposureUS))
     def setGammaEnabled(self, gammaEnabled):
         '''Sets whether the image will be in a non-linear color space approximating sqrt(x) (or a linear color space if gammaEnabled is False). \n(param, gammaEnabled) -> (ret)'''
         return self.cam.set(cv2.CAP_PROP_GAMMA, 1 if gammaEnabled else 0)
