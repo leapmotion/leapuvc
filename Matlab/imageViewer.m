@@ -1,36 +1,28 @@
-% Set variables required for device aquisition
-imageMode = 'YUY2_752x480'; % This is the image mode name
-deviceNum = 2;              % This is the device number on the system
+% ======== Image streaming example =======
+% === Requires Image Aquisition Toolbox ==
 
-% Grab a video camera object 
-vid = videoinput('winvideo', deviceNum, imageMode);
+% You can specify any resolution you want as long as the first (width)
+% value is 752 or 640 pixels wide and the second value is 480, 240, or 120
+% pixels tall
 
-% Change some of the default camera aquisition settings
-vid.ReturnedColorSpace = 'YCbCr';   % Set the returned colorspace to 'YCbCr'
-triggerconfig(vid, 'manual');       % Set the trigger mode to manual
+imageMode = 'YUY2_752x480'; % This is the image mode name 
 
+% This is the device number on the system 
+% (you will probably need to change this to 1 or 2)
+deviceNum = 2;              
+                            
 % Start camera streaming
-start(vid);
+startLeapStreaming;
+
+% Display images until user presses ctrl+c
 
 while(1)
     
     % Get an image from the camera
-    ycbcr = getsnapshot(vid);
-    
-    % Convert the ycbcr output to stereo grayscale
-    left = ycbcr(:,:,1);
-    right = uint8(zeros(size(left)));
-    right(:,1:2:end) = ycbcr(:,1:2:end,2);
-    right(:,2:2:end) = ycbcr(:,2:2:end,3);
+    [left, right] = getLeapFrame(vid);
     
     % Display the images
-    subplot_tight(1,2,1);    imagesc(left);
-    subplot_tight(1,2,2);    imagesc(right);
-    
-    caxis([0 255]);    colormap(gray(255));    
-    drawnow;
+    displayStereo(left,right);
     
 end
 
-% Stop the camera
-stop(vid);
